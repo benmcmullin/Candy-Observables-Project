@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { Candy } from '../models/candy.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CandyStoreService {
-  // Create a new "Subject" that emits the list when a new delivery occurs
+  newDelivery = new Subject<Candy[]>();
 
   private candiesForSale: Candy[] = [
     new Candy('Milky Way', 1),
@@ -27,5 +28,6 @@ export class CandyStoreService {
       new Candy('Skittles', 3),
       new Candy('M&M', 4)
     );
+    this.newDelivery.next(this.candiesForSale.slice());
   }
 }

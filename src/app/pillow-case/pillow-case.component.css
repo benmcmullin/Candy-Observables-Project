@@ -2,7 +2,7 @@
 .bag {
   margin-top: 12px;
   width: 100%;
-  height: 500px;
+  min-height: 500px;
   background: #f1f1f1;
   border-radius: 16px;
 }

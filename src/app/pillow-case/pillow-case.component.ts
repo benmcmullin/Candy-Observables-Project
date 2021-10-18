@@ -1,14 +1,15 @@
 import { Candy } from './../models/candy.model';
 import { PillowCaseService } from './pillow-case.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pillow-case',
   templateUrl: './pillow-case.component.html',
   styleUrls: ['./pillow-case.component.css'],
 })
-export class PillowCaseComponent implements OnInit {
-  // Create local Subscription
+export class PillowCaseComponent implements OnInit, OnDestroy {
+  private updatedCandiesSub: Subscription;
 
   myCandies: Candy[] = [];
 
@@ -16,7 +17,14 @@ export class PillowCaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.myCandies = this.pillowCaseService.getMySecretStash();
-    // Subscribe to the a Subject on pillowCase and store in a local Subscription
+    this.updatedCandiesSub =
+      this.pillowCaseService.candiesHaveChanged.subscribe((candies) => {
+        this.myCandies = candies;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.updatedCandiesSub.unsubscribe();
   }
 
   onEatAllCandy(): void {
