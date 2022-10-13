@@ -6,6 +6,8 @@ import { Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class PillowCaseService {
+
+  candyListChanged= new Subject<Candy[]>()
   // Create a "Subject" that to emit when a new candy is added to bag
 
   private myCandies: Candy[] = [new Candy('Kit Kat'), new Candy('Pop Rocks')];
@@ -16,12 +18,11 @@ export class PillowCaseService {
 
   addNewCandy(name: string) {
     this.myCandies.push(new Candy(name));
-    console.log('this.myCandies:', this.myCandies);
+    this.candyListChanged.next(this.myCandies)
   }
-
-  newCandyAdded = new Subject<Candy[]>()
 
   clearCandy() {
     this.myCandies = [];
+    this.candyListChanged.next(this.myCandies)
   }
 }

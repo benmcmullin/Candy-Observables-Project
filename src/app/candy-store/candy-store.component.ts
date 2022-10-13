@@ -1,7 +1,8 @@
 import { PillowCaseService } from './../pillow-case/pillow-case.service';
 import { CandyStoreService } from './candy-store.service';
 import { Candy } from './../models/candy.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-candy-store',
@@ -10,6 +11,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CandyStoreComponent implements OnInit {
   // Create local Subscription
+  private candyStoreServiceSub: Subscription;
 
   candiesForSale: Candy[] = [];
 
@@ -20,7 +22,14 @@ export class CandyStoreComponent implements OnInit {
 
   ngOnInit(): void {
     this.candiesForSale = this.candyStoreService.getCandiesForSale();
+    this.candyStoreService.candyBag.subscribe(data => {
+      this.candiesForSale = data
+    })
     // Subscribe to the a Subject on candyStore and store in a local Subscription
+  }
+
+  ngOnDestroy() {
+    this.candyStoreServiceSub.unsubscribe();
   }
 
   onSaveCandyToBag(candyName: string): void {
