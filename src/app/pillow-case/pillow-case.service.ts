@@ -19,6 +19,8 @@ export class PillowCaseService {
     console.log('this.myCandies:', this.myCandies);
   }
 
+  newCandyAdded = new Subject<Candy[]>()
+
   clearCandy() {
     this.myCandies = [];
   }
